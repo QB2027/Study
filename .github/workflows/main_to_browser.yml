@@ -40,7 +40,7 @@ jobs:
         run: |
           pip install --upgrade pip
 
-      # 运行模块化后的 Python 脚本
+      # 运行 Python 脚本
       - name: Run Python script
         run: |
           python ../generate_json.py
@@ -56,7 +56,7 @@ jobs:
       - name: Commit and push JSON file to browser branch
         run: |
           git checkout browser
-          mv ../files.json ./files.json
+          mv ./files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
