@@ -10,11 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出代码仓库
+      # 检出代码仓库并设置工作目录
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # 确保能访问所有分支
+
+      # 设置工作目录
+      - name: Set working directory
+        run: |
+          cd ${{ github.workspace }}
+          echo "Working directory set to: $(pwd)"
 
       # 检出 browser 分支，提取模块化的 Python 代码
       - name: Fetch Python script and modules from browser branch
@@ -56,7 +62,7 @@ jobs:
       - name: Commit and push JSON file to browser branch
         run: |
           git checkout browser
-          mv ./files.json ./files.json
+          cp ./files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
