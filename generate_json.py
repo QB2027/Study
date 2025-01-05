@@ -6,8 +6,8 @@ def main():
     """
     主函数，负责调用模块化功能完成任务。
     """
-    # 使用当前工作目录作为根目录
-    repo_root = os.getcwd()
+    # 仓库根目录，修复重复路径问题
+    repo_root = os.getenv("GITHUB_WORKSPACE", os.getcwd())
 
     # 输出文件路径
     output_file = os.path.join(repo_root, "files.json")
