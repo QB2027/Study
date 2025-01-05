@@ -11,21 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout main branch (浅克隆)
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Fetch Python script and modules from browser branch
+      - name: Fetch Python script and modules from browser branch (浅拉取)
         run: |
-          git fetch origin browser:browser
+          # 只fetch browser分支的最近一次提交
+          git fetch --depth=1 origin browser:browser
+          # 切换到本地 browser 分支
           git checkout browser
+          # 复制所需内容到上层目录
           cp -r ./utils ../utils
           cp ./generate_json.py ../generate_json.py
 
       - name: Switch back to main branch
-        run: |
-          git checkout main
+        run: git checkout main
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -33,15 +35,12 @@ jobs:
           python-version: 3.x
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
+        run: pip install --upgrade pip
 
-      # 生成 files.json
       - name: Run Python script
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
-        run: |
-          python ../generate_json.py
+        run: python ../generate_json.py
 
       - name: Verify JSON file
         run: |
@@ -50,16 +49,12 @@ jobs:
             exit 1
           fi
 
-      # 先把 files.json 移走，以免后面 checkout browser 时冲突
       - name: Temporarily move JSON file
-        run: |
-          mv ./files.json ../temp_files.json
+        run: mv ./files.json ../temp_files.json
 
       - name: Checkout browser branch
-        run: |
-          git checkout browser
+        run: git checkout browser
 
-      # 把文件再移回来，添加并提交
       - name: Commit and push JSON file to browser branch
         run: |
           mv ../temp_files.json ./files.json
