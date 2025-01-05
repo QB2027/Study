@@ -2,7 +2,7 @@ import os
 
 # 需要跳过的目录或文件
 EXCLUDE_DIRS = {'.git', '.github'}
-EXCLUDE_FILES = {'README.md', 'LICENSE', 'git_sync.bat', 'git_sync.sh'}
+EXCLUDE_FILES = {'README.md', 'LICENSE', 'git_sync.bat', 'git_sync.sh', '.gitignore'}
 
 def scan_directory(base_path, current_path=""):
     """
