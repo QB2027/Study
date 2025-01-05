@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main branch (浅克隆)
+      - name: Checkout main branch
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: Fetch Python script and modules from browser branch (浅拉取)
+      - name: Fetch Python script and modules from browser branch
         run: |
           # 只fetch browser分支的最近一次提交
           git fetch --depth=1 origin browser:browser
