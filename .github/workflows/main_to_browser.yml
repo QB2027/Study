@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: 3.x
 
-      # 安装必要的 Python 依赖（如有需要可在此添加）
+      # 安装必要的 Python 依赖
       - name: Install dependencies
         run: |
           pip install --upgrade pip
