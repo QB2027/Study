@@ -10,13 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 检出代码仓库
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # 2. 获取 browser 分支的脚本和模块
       - name: Fetch Python script and modules from browser branch
         run: |
           git fetch origin browser:browser
@@ -24,50 +22,48 @@ jobs:
           cp -r ./utils ../utils
           cp ./generate_json.py ../generate_json.py
 
-      # 3. 切回 main 分支，用于生成 JSON 文件
       - name: Switch back to main branch
         run: |
           git checkout main
 
-      # 4. 设置 Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.x
 
-      # 5. 安装依赖
       - name: Install dependencies
         run: |
           pip install --upgrade pip
 
-      # 6. 运行 Python 脚本 (生成 files.json)
+      # 生成 files.json
       - name: Run Python script
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
         run: |
           python ../generate_json.py
 
-      # 7. 验证是否已生成 files.json
       - name: Verify JSON file
         run: |
           if [ ! -f ./files.json ]; then
-            echo "[Error] files.json not found!"
+            echo "[Error] files.json 未生成！"
             exit 1
           fi
 
-      # 8. 切换到 browser 分支并推送 JSON 文件
-      - name: Commit and push JSON file to browser branch
+      # 【关键改动】先把 files.json 移走，以免后面 checkout browser 时冲突
+      - name: Temporarily move JSON file
+        run: |
+          mv ./files.json ../temp_files.json
+
+      - name: Checkout browser branch
         run: |
           git checkout browser
-          # 删除或注释掉原来的 “mv ./files.json ./files.json”
-          # 如下这样就不会拷贝相同文件到相同路径
-          # mv ./files.json ./files.json
 
-          # 直接提交已存在的 files.json
+      # 【关键改动】把文件再移回来，添加并提交
+      - name: Commit and push JSON file to browser branch
+        run: |
+          mv ../temp_files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-
-          # 如果没有改动，也不会报错退出
           git commit -m "Update files.json based on main branch" || echo "No changes to commit."
           git push origin browser
