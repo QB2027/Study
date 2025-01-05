@@ -1,0 +1,63 @@
+name: Generate JSON from Main and Store in Browser Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-and-store-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 检出代码仓库
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 确保能访问所有分支
+
+      # 检出 main 分支的内容
+      - name: Checkout main branch
+        run: |
+          git checkout main
+
+      # 切换到 browser 分支，提取 Python 脚本
+      - name: Fetch and switch to browser branch
+        run: |
+          git fetch origin browser:browser
+          git checkout browser
+
+      # 确保运行脚本所需的 Python 环境
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      # 安装必要的 Python 依赖（如有需要可在此添加）
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+
+      # 切换回 main 分支运行 browser 分支中的 Python 脚本
+      - name: Run Python script
+        run: |
+          git checkout main
+          python ./browser/generate_json.py
+
+      # 确保 JSON 文件生成
+      - name: Verify JSON file
+        run: |
+          if [ ! -f ./files.json ]; then
+            echo "Generated JSON file not found!"; exit 1;
+          fi
+
+      # 切换到 browser 分支并存储 JSON 文件
+      - name: Commit and push JSON file to browser branch
+        run: |
+          git checkout browser
+          cp ../files.json ./files.json
+          git add ./files.json
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git commit -m "Update files.json based on main branch"
+          git push origin browser

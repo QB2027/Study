@@ -1,0 +1,98 @@
+[
+  {
+    "name": "测试",
+    "type": "directory",
+    "path": "测试",
+    "children": [
+      {
+        "name": "你爹",
+        "type": "directory",
+        "path": "测试/你爹",
+        "children": [
+          {
+            "name": "坏",
+            "type": "directory",
+            "path": "测试/你爹/坏",
+            "children": [
+              {
+                "name": "kk.pdf",
+                "type": "file",
+                "path": "测试/你爹/坏/kk.pdf"
+              },
+              {
+                "name": "1.pdf",
+                "type": "file",
+                "path": "测试/你爹/坏/1.pdf"
+              }
+            ]
+          },
+          {
+            "name": "不好",
+            "type": "directory",
+            "path": "测试/你爹/不好",
+            "children": [
+              {
+                "name": "test",
+                "type": "directory",
+                "path": "测试/你爹/不好/test",
+                "children": [
+                  {
+                    "name": "专题练习4.pdf",
+                    "type": "file",
+                    "path": "测试/你爹/不好/test/专题练习4.pdf"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "好",
+        "type": "directory",
+        "path": "测试/好",
+        "children": [
+          {
+            "name": "好2.pdf",
+            "type": "file",
+            "path": "测试/好/好2.pdf"
+          },
+          {
+            "name": "好1.pdf",
+            "type": "file",
+            "path": "测试/好/好1.pdf"
+          }
+        ]
+      },
+      {
+        "name": "文件.pdf",
+        "type": "file",
+        "path": "测试/文件.pdf"
+      }
+    ]
+  },
+  {
+    "name": "很好",
+    "type": "directory",
+    "path": "很好",
+    "children": [
+      {
+        "name": "文件.pdf",
+        "type": "file",
+        "path": "很好/文件.pdf"
+      },
+      {
+        "name": "qwe",
+        "type": "directory",
+        "path": "很好/qwe",
+        "children": [
+          {
+            "name": "文件.pdf",
+            "type": "file",
+            "path": "很好/qwe/文件.pdf"
+          }
+        ]
+      }
+    ]
+  }
+]
