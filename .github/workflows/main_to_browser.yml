@@ -47,7 +47,7 @@ jobs:
       # 确保 JSON 文件生成
       - name: Verify JSON file
         run: |
-          if [ ! -f ./files.json ]; then
+          if [ ! -f /home/runner/work/**/files.json ]; then
             echo "Generated JSON file not found!"; exit 1;
           fi
 
@@ -55,7 +55,7 @@ jobs:
       - name: Commit and push JSON file to browser branch
         run: |
           git checkout browser
-          mv ../files.json ./files.json
+          mv /home/runner/work/**/files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
