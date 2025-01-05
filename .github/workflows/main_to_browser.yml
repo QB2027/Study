@@ -16,12 +16,6 @@ jobs:
         with:
           fetch-depth: 0 # 确保能访问所有分支
 
-      # 修正工作目录，避免嵌套问题
-      - name: Set working directory
-        run: |
-          cd ${{ github.workspace }}
-          echo "Working directory set to: $(pwd)"
-
       # 检出 browser 分支，提取模块化的 Python 代码
       - name: Fetch Python script and modules from browser branch
         run: |
@@ -34,7 +28,6 @@ jobs:
       - name: Switch back to main branch
         run: |
           git checkout main
-          cd ${{ github.workspace }}
 
       # 确保运行脚本所需的 Python 环境
       - name: Setup Python
@@ -49,14 +42,14 @@ jobs:
 
       # 运行 Python 脚本
       - name: Run Python script
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}  # 明确传递 GITHUB_WORKSPACE
         run: |
-          cd ${{ github.workspace }}
           python ../generate_json.py
 
       # 确保 JSON 文件生成
       - name: Verify JSON file
         run: |
-          cd ${{ github.workspace }}
           if [ ! -f ./files.json ]; then
             echo "Generated JSON file not found!"; exit 1;
           fi
@@ -64,9 +57,8 @@ jobs:
       # 切换到 browser 分支并存储 JSON 文件
       - name: Commit and push JSON file to browser branch
         run: |
-          cd ${{ github.workspace }}
           git checkout browser
-          cp ./files.json ./files.json
+          mv ./files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
