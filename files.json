@@ -1,10 +1,5 @@
 [
   {
-    "name": ".gitignore",
-    "type": "file",
-    "path": ".gitignore"
-  },
-  {
     "name": "08历史",
     "type": "directory",
     "path": "08历史",
