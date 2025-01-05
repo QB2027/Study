@@ -2,7 +2,7 @@ import os
 import json
 
 # 需要跳过的目录或文件，可根据需求自行增删
-EXCLUDE_DIRS = {'.git'}
+EXCLUDE_DIRS = {'.git', '.github'}
 EXCLUDE_FILES = {'README.md', 'LICENSE', 'git_sync.bat', 'git_sync.sh'}
 
 def scan_directory(base_path, current_path=""):
