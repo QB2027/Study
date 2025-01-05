@@ -49,7 +49,7 @@ jobs:
             exit 1
           fi
 
-      # 【关键改动】先把 files.json 移走，以免后面 checkout browser 时冲突
+      # 先把 files.json 移走，以免后面 checkout browser 时冲突
       - name: Temporarily move JSON file
         run: |
           mv ./files.json ../temp_files.json
@@ -58,7 +58,7 @@ jobs:
         run: |
           git checkout browser
 
-      # 【关键改动】把文件再移回来，添加并提交
+      # 把文件再移回来，添加并提交
       - name: Commit and push JSON file to browser branch
         run: |
           mv ../temp_files.json ./files.json
