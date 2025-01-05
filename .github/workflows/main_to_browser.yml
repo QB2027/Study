@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
-  
+
 jobs:
   generate-and-store-json:
     runs-on: ubuntu-latest
@@ -17,16 +16,17 @@ jobs:
         with:
           fetch-depth: 0 # 确保能访问所有分支
 
-      # 检出 main 分支的内容
-      - name: Checkout main branch
-        run: |
-          git checkout main
-
-      # 切换到 browser 分支，提取 Python 脚本
-      - name: Fetch and switch to browser branch
+      # 检出 browser 分支，提取 Python 脚本
+      - name: Fetch Python script from browser branch
         run: |
           git fetch origin browser:browser
           git checkout browser
+          cp ./generate_json.py ../generate_json.py
+
+      # 切换回 main 分支，用于生成 JSON 文件
+      - name: Switch back to main branch
+        run: |
+          git checkout main
 
       # 确保运行脚本所需的 Python 环境
       - name: Setup Python
@@ -39,11 +39,10 @@ jobs:
         run: |
           pip install --upgrade pip
 
-      # 切换回 main 分支运行 browser 分支中的 Python 脚本
+      # 运行 Python 脚本
       - name: Run Python script
         run: |
-          git checkout main
-          python ./browser/generate_json.py
+          python ../generate_json.py
 
       # 确保 JSON 文件生成
       - name: Verify JSON file
@@ -56,7 +55,7 @@ jobs:
       - name: Commit and push JSON file to browser branch
         run: |
           git checkout browser
-          cp ../files.json ./files.json
+          mv ../files.json ./files.json
           git add ./files.json
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
