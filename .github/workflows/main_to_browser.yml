@@ -1,6 +1,7 @@
 name: Generate JSON from Main and Store in Browser Branch
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
